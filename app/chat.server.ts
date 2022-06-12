@@ -1,5 +1,5 @@
 import { redirect } from '@remix-run/node'
-import LRUCache from 'lru-cache'
+import type LRUCache from 'lru-cache'
 import { EventEmitter } from 'node:events'
 import { getSession } from './session.server'
 
@@ -8,16 +8,10 @@ declare global {
   var chatEvents: EventEmitter
 }
 
-global.users =
-  global.users ||
-  new LRUCache({
-    max: 100,
-    ttl: 3_600_000,
-  })
+  global.users =
+  global.users || []
 global.chatEvents = global.chatEvents || new EventEmitter()
-
 export const chat = chatEvents
-console.log("🚀 ~ file: chat.server.ts ~ line 20 ~ chat", chat)
 
 /**
  * Checks if a user is currently logged in, and if not, redirects to the login page.
