@@ -1,5 +1,5 @@
 import { redirect } from '@remix-run/node'
-import type LRUCache from 'lru-cache'
+import LRUCache from 'lru-cache'
 import { EventEmitter } from 'node:events'
 import { getSession } from './session.server'
 
@@ -8,9 +8,14 @@ declare global {
   var chatEvents: EventEmitter
 }
 
-  global.users =
-  global.users || []
+global.users =
+  global.users ||
+  new LRUCache({
+    max: 100,
+    ttl: 1000 * 60 * 5,
+  })
 global.chatEvents = global.chatEvents || new EventEmitter()
+console.log(global)
 export const chat = chatEvents
 
 /**
